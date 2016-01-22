@@ -1,0 +1,15 @@
+name: ir_clubchamps
+dependencies:
+- click=4.1=py34_0
+- openssl=1.0.2e=0
+- pip=7.1.2=py34_0
+- python=3.4.4=0
+- readline=6.2=2
+- requests=2.9.1=py34_0
+- setuptools=19.2=py34_0
+- sqlite=3.9.2=0
+- tk=8.5.18=0
+- wheel=0.26.0=py34_1
+- xz=5.0.5=0
+- zlib=1.2.8=0
+
