@@ -1,6 +1,8 @@
-from ir_webstats.client import iRWebStats
-import click
+import os
+import sys
 import urllib
+import click
+from ir_webstats.client import iRWebStats
 
 irw = iRWebStats()
 
@@ -13,13 +15,15 @@ irw = iRWebStats()
 @click.option("--user", prompt="Username")
 @click.password_option(confirmation_prompt=False)
 def ir_clubchamp(club, year, quarter=None, tops=3, user=None, password=None):
+    if hasattr(sys, "frozen"):
+        os.environ["REQUESTS_CA_BUNDLE"] = os.path.join(os.path.dirname(sys.executable), "cacert.pem")
     irw.login(user, password)
     if not irw.logged:
         click.echo (
             "Couldn't log in to iRacing Membersite. Please check your credentials")
-        exit()
-    champs = acquire_champ_list(club, year, quarter, tops)
-    print_champs(champs)
+    else:
+        champs = acquire_champ_list(club, year, quarter, tops)
+        print_champs(champs)
 
 
 def acquire_champ_list(club, year, quarter=None, tops=3):
