@@ -26,15 +26,18 @@ def ir_clubchamp(club, year, quarter=None, tops=3, user=None, password=None):
         print_champs(champs)
 
 
+def find_club_id(clubname):
+    for club_id in irw.CLUBS:
+        shortclubname = urllib.parse.unquote(irw.CLUBS[club_id]["shortclubname"])
+        if shortclubname == clubname:
+            return irw.CLUBS[club_id]["id"]
+    else:
+        raise KeyError("Club ID not found for {}".format(clubname))
+
+
 def acquire_champ_list(club, year, quarter=None, tops=3):
     champs = []
-    for club_id in irw.CLUBS:
-        if irw.CLUBS[club_id]["shortclubname"] == club:
-            club_id = irw.CLUBS[club_id]["id"]
-            break
-    else:
-        raise KeyError("Club ID not found for {}".format(club))
-
+    club_id = find_club_id(club)
     seasons2process = irw.all_seasons()
     if year:
         seasons2process = [s for s in seasons2process if s["year"] == year]
