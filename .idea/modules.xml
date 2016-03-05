@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/.idea/ir_clubchamps.iml" filepath="$PROJECT_DIR$/.idea/ir_clubchamps.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../ir_webstats/.idea/ir_webstats.iml" filepath="$PROJECT_DIR$/../ir_webstats/.idea/ir_webstats.iml" />
+    </modules>
+  </component>
+</project>
