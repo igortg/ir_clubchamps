@@ -4,9 +4,9 @@ dependencies:
 - openssl=1.0.2
 - pip=7.1.2=py34_0
 - python=3.4.4=0
-- readline=6.2=2
 - requests=2.9.1=py34_0
 - setuptools=19.2=py34_0
 - wheel=0.26.0=py34_1
 - zlib=1.2.8=0
+- pytest=3.0
 

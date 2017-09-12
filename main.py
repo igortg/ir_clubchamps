@@ -9,15 +9,24 @@ irw = iRWebStats()
 
 @click.command()
 @click.argument("club")
-@click.argument("year", type=int)
-@click.option("--quarter", type=int)
+@click.argument("season")
 @click.option("--tops", default=3, type=int)
 @click.option("--user", prompt="Username")
-@click.password_option(confirmation_prompt=False)
-def ir_clubchamp(club, year, quarter=None, tops=3, user=None, password=None):
+def ir_clubchamp(club, season, tops=3, user=None, password=None):
+    '''iRacing Club Champions - find the topX from your club on iRacing official seasons.
+
+    To get all Top10 from Club Brazil:
+
+    > ir_clubchamps Brazil 2014-3 --top=10
+    '''
+    year, quarter = map(int, season.split('-'))
     if hasattr(sys, "frozen"):
         os.environ["REQUESTS_CA_BUNDLE"] = os.path.join(os.path.dirname(sys.executable), "cacert.pem")
-    irw.login(user, password)
+    if os.path.isfile('cookie.tmp'):
+        irw.login()
+    else:
+        password = click.prompt('Password', hide_input=True)
+        irw.login(user, password)
     if not irw.logged:
         click.echo (
             "Couldn't log in to iRacing Membersite. Please check your credentials")
@@ -35,7 +44,24 @@ def find_club_id(clubname):
         raise KeyError("Club ID not found for {}".format(clubname))
 
 
-def acquire_champ_list(club, year, quarter=None, tops=3):
+def get_seasons(year, quarter):
+    '''
+    Return seasons ID for the given year-quarter
+
+    :param int year:
+    :param int quarter:
+    :rtype: list
+    '''
+    for yearquarter in irw.YEARANDQUARTER:
+        if yearquarter['year'] == year:
+            for quarters in yearquarter['quarters']:
+                if quarters['quarterid'] == quarter:
+                    return quarters['seasons']
+    else:
+        raise KeyError("Seasons for {}-{} not found".format(year, quarter))
+
+
+def acquire_champ_list(club, year, quarter, tops=3):
     champs = []
     club_id = find_club_id(club)
     seasons2process = irw.all_seasons()
