@@ -10,16 +10,16 @@ irw = iRWebStats()
 @click.command()
 @click.argument("club")
 @click.argument("season")
-@click.option("--tops", default=3, type=int)
+@click.option("--top", default=3, type=int)
 @click.option("--user", prompt="Username")
-def ir_clubchamp(club, season, tops=3, user=None, password=None):
+def ir_clubchamp(club, season, top=3, user=None, password=None):
     '''iRacing Club Champions - find the topX from your club on iRacing official seasons.
 
     To get all Top10 from Club Brazil:
 
-    > ir_clubchamps Brazil 2014-3 --top=10
+    > ir_clubchamps Brazil 2014.3 --top=10
     '''
-    year, quarter = map(int, season.split('-'))
+    year, quarter = map(int, season.split('.'))
     if hasattr(sys, "frozen"):
         os.environ["REQUESTS_CA_BUNDLE"] = os.path.join(os.path.dirname(sys.executable), "cacert.pem")
     if os.path.isfile('cookie.tmp'):
@@ -31,7 +31,7 @@ def ir_clubchamp(club, season, tops=3, user=None, password=None):
         click.echo (
             "Couldn't log in to iRacing Membersite. Please check your credentials")
     else:
-        champs = acquire_champ_list(club, year, quarter, tops)
+        champs = acquire_champ_list(club, year, quarter, top)
         print_champs(champs)
 
 
@@ -65,6 +65,8 @@ def acquire_champ_list(club, year, quarter, tops=3):
     champs = []
     club_id = find_club_id(club)
     seasons2process = irw.all_seasons()
+    if seasons2process is None:
+        sys.exit("Exiting (Unable to load Season data)...")
     if year:
         seasons2process = [s for s in seasons2process if s["year"] == year]
     if quarter:
